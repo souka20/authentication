@@ -4,10 +4,11 @@ import { AuthModule } from './auth/auth.module';
 
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthService } from './auth/auth.service';
+import { JwtModule } from '@nestjs/jwt';
 
 
 @Module({
-  imports: [AuthModule,PrismaModule],
+  imports: [AuthModule,PrismaModule,JwtModule],
 
 })
 export class AppModule {}

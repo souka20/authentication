@@ -37,7 +37,7 @@ async signin(dto:AuthDto,req:Request,res: Response){
   }
   //sign jwt and return to the user
 const token = await this.signToken({
-    userid: userExists.id,
+    id: userExists.id,
     email:userExists.email,
 });
 return {token};
@@ -53,7 +53,7 @@ async comparePasswords(args:{password :string , hash:string}){
     
   return  await bcrypt.compare(args.password, args.hash);  
 }
-  async signToken(args: {userid: string,email:string }){
+  async signToken(args: {id: string,email:string }){
     const payload = args
    return this.jwt.signAsync(payload,{secret:jwtSecret})
 

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { AuthDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
@@ -27,7 +27,8 @@ async signup(dto:AuthDto){
 async signin(dto:AuthDto,req:Request,res: Response){
     const {email , password } = dto;
     const userExists =await this.prisma.user.findUnique({ where :{email}});
-    
+    //throw new UnauthorizedException();
+    //return {userExists};
     if(!userExists){
         throw new BadRequestException('wrong credencials');
     }
@@ -40,8 +41,22 @@ const token = await this.signToken({
     id: userExists.id,
     email:userExists.email,
 });
-return {token};
+if (!token){
+  throw new ForbiddenException('Could not sign in!!');
 }
+res.cookie('token',token,{});
+return res.send({message:'Logged in!!'});
+}
+async signout(req:Request , res:Response){
+      res.clearCookie('token')
+        return res.send({message:'logged out'})
+      
+
+}
+
+
+
+
 async hashPassword(password : string){
     const saltOrRounds = 10;
     

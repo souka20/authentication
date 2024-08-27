@@ -15,7 +15,16 @@ datasource db {
 model User{
   id String @unique @default(uuid())
   email String @unique
+  role Role @default(User)
   hashedPassword String
   createAt DateTime @default(now())
   updateAt DateTime @updatedAt()
+
+
+}
+
+enum Role{
+
+  Admin
+  User
 }

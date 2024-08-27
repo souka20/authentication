@@ -5,12 +5,13 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { jwtSecret } from '../utils/constants';
 import { Request, Response } from 'express';
+import { Role } from '@prisma/client';
 @Injectable()
 export class AuthService {
   constructor(private prisma :PrismaService, private jwt:JwtService){}
 async signup(dto:AuthDto){
     const {email , password } = dto;
-    const userExists =await this.prisma.user.findUnique({ where :{email}});
+    const userExists = await this.prisma.user.findUnique({ where :{email}});
     
     if(userExists){
         throw new BadRequestException('email already exist');
@@ -38,14 +39,15 @@ async signin(dto:AuthDto,req:Request,res: Response){
   }
   //sign jwt and return to the user
 const token = await this.signToken({
-    id: userExists.id,
-    email:userExists.email,
+    // id: userExists.id,
+    role: userExists.role,
+    email:userExists.email
 });
 if (!token){
   throw new ForbiddenException('Could not sign in!!');
 }
-res.cookie('token',token,{});
-return res.send({message:'Logged in!!'});
+// res.cookie('token',token,{});
+return res.send({message:'Logged in!!', token: token});
 }
 async signout(req:Request , res:Response){
       res.clearCookie('token')
@@ -68,7 +70,7 @@ async comparePasswords(args:{password :string , hash:string}){
     
   return  await bcrypt.compare(args.password, args.hash);  
 }
-  async signToken(args: {id: string,email:string }){
+  async signToken(args: {role: Role,email:string }){
     const payload = args
    return this.jwt.signAsync(payload,{secret:jwtSecret})
 

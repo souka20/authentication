@@ -5,15 +5,16 @@ import { PrismaModule } from 'prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtSecret } from 'src/utils/constants';
 import { PassportModule } from '@nestjs/passport';
+
  @Module({
   imports:[PrismaModule,PassportModule,JwtModule.register({
     
     global : true,
     secret:jwtSecret,
-    signOptions:{expiresIn: '60s'},
+    signOptions:{expiresIn: '15min'},
   })],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService,],
 
 
 })

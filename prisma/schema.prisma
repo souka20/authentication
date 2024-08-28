@@ -28,3 +28,13 @@ enum Role{
   Admin
   User
 }
+
+model Product{
+ id String @default(uuid()) @id
+ title String 
+ description String 
+ price Float 
+ createAt DateTime @default(now())
+ updateAt DateTime @updatedAt()
+
+}

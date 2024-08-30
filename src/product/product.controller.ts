@@ -1,19 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Query } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { Prisma } from '@prisma/client';
-
-@Controller('product')
+import { Prisma, Product } from '@prisma/client';
+import { FindProductDto } from './dto/find-product.dto';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+@Controller('products')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  AddProduct(@Body() createProductDto: Prisma.ProductCreateInput) {
+  AddProduct(@Body() createProductDto: CreateProductDto) {
     return this.productService.AddProduct(createProductDto);
   }
 
   @Get()
-  findAll() {
-    return this.productService.findAll();
+  findAll(@Query() findAllProductDto : FindProductDto) :Promise<Product[]>{
+    return this.productService.findAll(findAllProductDto);
   }
 
   @Get(':id')

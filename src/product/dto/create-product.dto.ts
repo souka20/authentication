@@ -5,14 +5,16 @@ export class CreateProductDto {
 
     @IsNotEmpty()
     @IsString()
-    public title: String 
+    public title: string 
     
     @IsNotEmpty()
     @IsString()
-    public description: String 
+    public description: string 
 
     @IsNotEmpty()
     @IsNumber()
     @IsPositive()
     public price:number
+
+    public categoryId:number
 }

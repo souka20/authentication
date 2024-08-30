@@ -9,9 +9,10 @@ import { UsersModule } from './users/users.module';
 import { RolesGuard } from './auth/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { ProductModule } from './product/product.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
-  imports: [AuthModule,PrismaModule,JwtModule, UsersModule,ProductModule],
+  imports: [AuthModule,PrismaModule,JwtModule, UsersModule,ProductModule, CategoriesModule],
   providers: [
     {
       provide: APP_GUARD,
